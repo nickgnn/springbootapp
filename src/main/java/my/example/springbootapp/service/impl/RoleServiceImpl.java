@@ -18,7 +18,7 @@ public class RoleServiceImpl implements RoleService {
         if (isExistsRole(name)) {
             return roleRepository.findRoleByRolename(name).get().getId();
         } else {
-            roleRepository.insertNewRoles(1l, "ROLE_USER");
+            roleRepository.insertNewRoles(2l, "ROLE_ADMIN");
 
             return roleRepository.findRoleByRolename(name).get().getId();
         }
