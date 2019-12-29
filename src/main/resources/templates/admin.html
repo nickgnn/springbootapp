@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>List of Users</title>
+
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+          crossorigin="anonymous">
+    <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.4.1.js"></script>
+    <script type="text/javascript" src="../js/script.js"></script>
+
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">Spring Boot + Bootstrap</a>
+            </div>
+
+            <div class="collapse navbar-collapse">
+                <ul class="nav justify-content-between">
+                    <li class="nav-item"><a class="nav-link active" href="/">Home</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <ul class="nav nav-pills nav-fill">
+                    <li class="nav-item"><a class="nav-link" href="/logout">Logout</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+
+            <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+                <div class="sidebar-sticky">
+
+                    <ul class="nav flex-column">
+                        <li class="nav-item"><a class="nav-link" href="/admin">Admin</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/user">User</a></li>
+                    </ul>
+
+                </div>
+            </nav>
+
+            <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1>Admin panel</h1>
+                </div>
+
+                <div class="container-fluid">
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li><a class="nav-item nav-link active" href="#userTable" role="tab" data-toggle="tab">Users table</a></li>
+                        <li><a class="nav-item nav-link" href="#newUser" role="tab" data-toggle="tab">New user</a></li>
+                    </ul>
+
+                    <div class="tab-content">
+
+                        <div class="tab-pane active" id="userTable">
+                            <div class="card-header">
+                                <h4 class="my-0 font-weight-normal">All users</h4>
+                            </div>
+
+                            <table class="table table-hover table-responsive">
+                                <thead>
+                                <tr>
+                                    <th> ID </th>
+                                    <th> User </th>
+                                    <th> Password </th>
+                                    <th> Age </th>
+                                    <th> Role </th>
+                                    <th> Role_ID </th>
+                                    <th> Edit </th>
+                                    <th> Remove </th>
+                                </tr>
+                                </thead>
+
+                                <tbody>
+                                <tr th:each="user : ${users}">
+                                    <td class="alert-dark"><span th:text="${user.id}"> ID </span></td>
+                                    <td><span th:text="${user.username}"> Username </span></td>
+                                    <td><span th:text="${user.password}"> Password </span></td>
+                                    <td><span th:text="${user.age}"> Age </span></td>
+                                    <td><span th:text="${user.role}"> Role </span></td>
+                                    <td class="text-muted"><span th:text="${user.role_id}"> Role_ID </span></td>
+                                    <!--<td><form th:action="@{'/admin/' + ${user.id}}" method="get"><input type="hidden" name="id" th:value="${user.id}"/><input type="submit" class="btn btn-primary" value="Edit"></form></td>-->
+                                    <td>
+                                        <button class="btn btn-primary" data-toggle="modal" th:attr="data-target='#modalEdit' + ${user.id}">Edit</button>
+
+                                        <div class="modal fade" th:attr="id='modalEdit'+${user.id}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered" role="dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h4 class="modal-title">Edit user</h4>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+
+                                                    <div class="modal-body">
+                                                        <form action="#" th:action="@{'/admin/' + ${user.id}}" th:object="${admin}" method="post">
+                                                            <div class="form-group row">
+                                                                <label class="col-sm-2 col-form-label form-control-sm">Username:</label>
+
+                                                                <div class="form-group mb-2">
+                                                                    <input type="text" class="form-control form-control-sm" name="username" required placeholder="enter Username" th:value="${user.username}"/>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="form-group row">
+                                                                <label class="col-sm-2 col-form-label form-control-sm">Password:</label>
+
+                                                                <div class="form-group mb-2">
+                                                                    <input type="password" class="form-control form-control-sm" name="password" required placeholder="enter password" th:value="${user.password}"/>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="form-group row">
+                                                                <label class="col-sm-2 col-form-label form-control-sm">Age:</label>
+
+                                                                <div class="form-group mb-2">
+                                                                    <input type="number" class="form-control form-control-sm" name="age" placeholder="optional" th:value="${user.age}"/>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="form-group row">
+                                                                <label class="col-sm-2 col-form-label form-control-sm">Role:</label>
+
+                                                                <div class="radio custom-control-inline">
+                                                                    <label>
+                                                                        <input type="radio" name="role" value="admin"/> Admin
+                                                                    </label>
+                                                                </div>
+
+                                                                <div class="radio custom-control-inline">
+                                                                    <label>
+                                                                        <input type="radio" name="role" value="user"/> User
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                                <button type="submit" class="btn btn-primary">Edit</button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                    </td>
+                                    <td><form th:action="@{/del}" method="post"><input type="hidden" name="id" th:value="${user.id}"/><input type="submit" class="btn btn-danger" value="Remove"></form></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="tab-pane" id="newUser">
+
+                            <div class="container">
+                                <div th:if="${message}">
+                                    Username already exists. Please choose another username.
+                                </div>
+
+                                <p><h4>Fill form below to add new user</h4></p>
+                                <form action="#" th:action="@{/add}" th:object="${add}" method="post">
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label">Username:</label>
+
+                                        <div class="form-group mb-2">
+                                            <input type="text" class="form-control form-control-sm" name="username" required placeholder="enter Username"/>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label">Password:</label>
+
+                                        <div class="form-group mb-2">
+                                            <input type="password" class="form-control form-control-sm" name="password" required placeholder="enter password"/>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label">Age:</label>
+
+                                        <div class="form-group mb-2">
+                                            <input type="number" class="form-control form-control-sm" name="age" placeholder="optional"/>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label">Role:</label>
+
+                                        <div class="radio custom-control-inline">
+                                            <label>
+                                                <input type="radio" name="role" value="admin"/> Admin
+                                            </label>
+                                        </div>
+
+                                        <div class="radio custom-control-inline">
+                                            <label>
+                                                <input type="radio" name="role" value="user"/> User
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <input type="submit" class="btn btn-primary" value="Add User"/>
+                                    </div>
+                                </form>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+            integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
+
+</body>
+</html>
