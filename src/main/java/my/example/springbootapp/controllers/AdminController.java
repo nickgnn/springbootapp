@@ -38,8 +38,8 @@ public class AdminController {
     }
 
     @PostMapping("/admin/{id}")
-    public String editUser(@PathVariable("id") Long id, @RequestParam String username, @RequestParam String password, @RequestParam Integer age, @RequestParam(required = false) String role, Model model) throws DBException {
-        User userEdited = new User(id, username, password, age, role);
+    public String editUser(@PathVariable("id") Long id, @RequestParam (required = false) Long role_id, @RequestParam String username, @RequestParam String password, @RequestParam Integer age, @RequestParam(required = false) String role, Model model) throws DBException {
+        User userEdited = new User(id, username, password, age, role, role_id);
         User userByName;
 
         if (userService.isExistsUser(username)) {
