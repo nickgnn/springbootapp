@@ -84,7 +84,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void editUser(User user) throws DBException {
-        roleService.deleteRoles(user.getId(), user.getRole_id());
+        roleService.deleteRoles(user.getId(), userRepository.findById(user.getId()).get().getRole_id());
 
         if (StringUtils.isEmpty(user.getUsername())) {
             user.setUsername(getUserById(user.getId()).getUsername());
