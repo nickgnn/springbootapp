@@ -60,7 +60,7 @@ public class UserServiceImpl implements UserService {
         }
 
         if (StringUtils.isEmpty(user.getRole())) {
-            user.setRole("user");
+            user.setRole("admin");
         }
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
